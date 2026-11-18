@@ -1,5 +1,21 @@
 # Passo a passo no Linux (coleta com LIKWID)
 
+> **ONDE A COLETA FOI FEITA (Etapa A, 18/11/2026): máquina `h52` do Lab-12/DINF, CORE 3.**
+> A Etapa B **tem que** ser na mesma `h52` (enunciado: mesma máquina e igualdade de condições).
+> O notebook do Gabriel (Intel Core Ultra 5 125H, Meteor Lake híbrido) **não é suportado pelo
+> LIKWID** (nem a versão do GitHub), e a `macalan` não dá acesso aos contadores (tudo zerado).
+>
+> No DINF (sem sudo; o script já trata isso):
+> ```bash
+> ssh <login>@macalan.c3sl.ufpr.br
+> ssh h52
+> cd ~/Broyden-ICC && git pull
+> tmux new -s coleta
+> VERSOES=otimizado ./likwid/roda_testes.sh 2>&1 | tee coleta_B.log
+> ```
+> O script fixa a frequência com `likwid-setFrequencies -g performance -c 3` e volta para
+> `powersave` no final, como pede o enunciado.
+
 Tudo o que precisa ser feito no Linux é **rodar um script**. Compilação, testes de sanidade,
 fixar frequência, topologia, medições e empacotamento são automáticos.
 
@@ -110,6 +126,6 @@ Se for usar o Claude lá, abra o Claude na pasta `Broyden-ICC` e diga:
 ```bash
 NMAX_NAO_OTIM=4000   # maior N da versão não otimizada (padrão 4000; acima disso leva horas)
 REPS=3               # repetições de cada medição de tempo (padrão 3)
-CORE=0               # núcleo onde o programa roda (padrão 0)
+CORE=3               # núcleo onde o programa roda (padrão 3, exigido no Lab-12/DINF)
 ```
 Exemplo: `NMAX_NAO_OTIM=2000 REPS=5 ./likwid/roda_testes.sh`

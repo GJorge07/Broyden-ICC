@@ -4,13 +4,13 @@
 #   make clean      -> remove objetos e executaveis
 
 CC      = gcc
-CFLAGS  = -O3 -march=native -mavx -fopt-info-vec -Wall
+CFLAGS  = -O3 -mavx2 -march=native -fopt-info-vec -Wall
 LDLIBS  = -lm
 
 ifdef LIKWID
   LIKWID_HOME ?= /usr/local
   CFLAGS += -DLIKWID_PERFMON -I$(LIKWID_HOME)/include
-  LDLIBS += -L$(LIKWID_HOME)/lib -llikwid
+  LDLIBS += -L$(LIKWID_HOME)/lib -Wl,-rpath,$(LIKWID_HOME)/lib -llikwid
 endif
 
 HEADERS = $(wildcard *.h)

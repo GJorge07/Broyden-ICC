@@ -14,5 +14,5 @@ image.png
 
 # Gerados pelo script do LIKWID
 bin/
-resultados_teste/
+resultados*/
 *.tar.gz
