@@ -2,8 +2,8 @@
 #include "sistemas_lineares.h"
 
 /* Troca as linhas k e p de A (a partir da coluna k) e de b. */
-static void trocaLinhas(double *A, double *b, int n, int k, int p)
-{
+static void trocaLinhas(double *A, double *b, int n, int k, int p) {
+    
     for (int j = k; j < n; ++j) {
         double t = A[k * n + j];
         A[k * n + j] = A[p * n + j];
@@ -15,7 +15,7 @@ static void trocaLinhas(double *A, double *b, int n, int k, int p)
 }
 
 /* Eliminacao de Gauss com pivoteamento parcial + retrossubstituicao. O(n^3).
- * Propositalmente ingenua: nao explora a estrutura tridiagonal, ou seja,
+ * Propositalmente nao otimizada: nao explora a estrutura tridiagonal, ou seja,
  * opera sobre todos os zeros da matriz. */
 int gaussDenso(double *A, double *b, int n)
 {
@@ -52,4 +52,19 @@ int gaussDenso(double *A, double *b, int n)
         b[i] = s / A[i * n + i];
     }
     return 0;
+}
+
+/* Eliminacao de Gauss para sistemas tridiagonais (versao otimizada). */
+void gaussTridiagonal(const double *restrict sub, double *restrict diag,
+                      const double *restrict sup, double *restrict b, int n)
+{
+    /* TODO(Arthur): implementar o solver otimizado.
+     * Linha i do sistema: sub[i]*x[i-1] + diag[i]*x[i] + sup[i]*x[i+1] = b[i]
+     * (sub[0] e sup[n-1] nao fazem parte da matriz e devem ser ignorados).
+     * Pode sobrescrever diag e b; a solucao deve ser devolvida em b.
+     * NAO pode alterar sub e sup: o newton.c calcula as duas uma unica vez
+     * e reaproveita em todas as iteracoes.
+     * Para conferir: a saida de ./broyden deve ser identica a de
+     * ./broyden-nao-otimizado (ver secao 7 do Explicacoes.md). */
+    (void) sub; (void) diag; (void) sup; (void) b; (void) n;
 }

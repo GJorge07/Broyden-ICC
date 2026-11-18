@@ -1,8 +1,18 @@
 # Artefatos de compilacao
 *.o
 broyden
-broyden-ingenuo
+broyden-nao-otimizado
 *.exe
 
 # Saidas de experimentos temporarias
 *.log
+
+# Arquivos pessoais (nao vao para o repositorio)
+Explicacoes.md
+Duvidas.md
+image.png
+
+# Gerados pelo script do LIKWID
+bin/
+resultados_teste/
+*.tar.gz
