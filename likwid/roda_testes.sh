@@ -115,7 +115,7 @@ trap volta_freq EXIT
     echo "Data: $(date)"
     echo "Kernel: $(uname -a)"
     echo "Compilador: $(gcc --version | head -1)"
-    echo "Flags: -O3 -mavx2 -march=native -fopt-info-vec"
+    echo "Flags: -O3 -march=native -mavx -fopt-info-vec"
     echo "Governor: $(cat /sys/devices/system/cpu/cpu$CORE/cpufreq/scaling_governor 2>/dev/null)"
     echo "Turbo desabilitado (intel_pstate/no_turbo): $(cat /sys/devices/system/cpu/intel_pstate/no_turbo 2>/dev/null)"
     echo "Nucleo usado: $CORE"

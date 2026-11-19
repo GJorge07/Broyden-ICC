@@ -4,7 +4,7 @@
 #   make clean      -> remove objetos e executaveis
 
 CC      = gcc
-CFLAGS  = -O3 -mavx2 -march=native -fopt-info-vec -Wall
+CFLAGS  = -O3 -march=native -mavx -fopt-info-vec -Wall
 LDLIBS  = -lm
 
 ifdef LIKWID

@@ -5,7 +5,9 @@
 >   `ssh <login>@macalan.c3sl.ufpr.br` e depois `ssh h52`. **Etapa B na mesma `h52`.**
 > - O notebook do Gabriel (Core Ultra 5 125H, Meteor Lake) não é suportado pelo LIKWID;
 >   a `macalan` não dá acesso aos MSR (contadores zerados). Não usar nenhum dos dois.
-> - Enunciado: compilar com `-O3 -mavx2 -march=native`; usar SEMPRE o CORE 3; fixar a
+> - Flags do enunciado do trabalho: `-O3 -march=native -mavx -fopt-info-vec` (uma pagina
+>   geral do LIKWID cita `-mavx2`; no i5-7500 o codigo gerado e identico, pois
+>   -march=native ja ativa AVX2. A Etapa A foi compilada com -mavx2). Usar SEMPRE o CORE 3; fixar a
 >   frequência com `likwid-setFrequencies -g performance -c 3` antes e
 >   `likwid-setFrequencies -g powersave -c 3` depois. O script já faz tudo isso
 >   (CORE padrão = 3) e funciona sem sudo.
@@ -29,7 +31,7 @@ nem o script sem necessidade.
     (`gaussTridiagonal` em `sistemas_lineares.c`, implementado pelo Arthur).
 - Marcadores LIKWID já estão no código: regiões **`newton`**, **`jacobiana`**, **`sl`**.
   O header `likwid_markers.h` usa a API real só com `-DLIKWID_PERFMON` (`make LIKWID=1`).
-- Flags obrigatórias do enunciado (já no Makefile): `-O3 -mavx2 -march=native` (+ `-fopt-info-vec`, so relatorio de vetorizacao).
+- Flags obrigatórias do enunciado (já no Makefile): `-O3 -march=native -mavx -fopt-info-vec`.
 - Parâmetros obrigatórios dos testes: `MAX=25`, `epsilon=0`.
   `x0=-1` (com 0.5 o Newton não converge; com eps=0 são sempre 25 iterações de qualquer forma).
 - N exigidos: 32 64 128 256 512 1000 2000 4000 8000 9000 10000 20000.
