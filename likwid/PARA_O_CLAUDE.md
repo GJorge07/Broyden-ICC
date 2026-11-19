@@ -1,6 +1,7 @@
 # Instruções para o Claude Code (sessão no Linux)
 
-> **19/11/2026 — ETAPA B:** a Etapa A já foi feita e o solver do Arthur está pronto.
+> **19/11/2026 — COLETA CONCLUÍDA (Etapas A e B).** No Windows, leia `PARA_O_CLAUDE_WINDOWS.md` na raiz.
+> **ETAPA B:** a Etapa A já foi feita e o solver do Arthur está pronto.
 > Para a Etapa B, siga **`likwid/ETAPA_B_PARA_O_CLAUDE.md`**.
 
 > **ATUALIZAÇÃO (18/11/2026), leia antes do resto:**

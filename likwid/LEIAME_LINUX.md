@@ -1,6 +1,7 @@
 # Passo a passo no Linux (coleta com LIKWID)
 
-> **19/11/2026 — ETAPA B:** a Etapa A já foi feita e o solver do Arthur está pronto.
+> **19/11/2026 — COLETA CONCLUÍDA (Etapas A e B).** No Windows, leia `PARA_O_CLAUDE_WINDOWS.md` na raiz.
+> **ETAPA B:** a Etapa A já foi feita e o solver do Arthur está pronto.
 > Para a Etapa B, siga **`likwid/ETAPA_B_PARA_O_CLAUDE.md`**.
 
 > **ONDE A COLETA FOI FEITA (Etapa A, 18/11/2026): máquina `h52` do Lab-12/DINF, CORE 3.**
