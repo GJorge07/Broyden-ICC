@@ -1,5 +1,8 @@
 # Instruções para o Claude Code (sessão no Linux)
 
+> **19/11/2026 — ETAPA B:** a Etapa A já foi feita e o solver do Arthur está pronto.
+> Para a Etapa B, siga **`likwid/ETAPA_B_PARA_O_CLAUDE.md`**.
+
 > **ATUALIZAÇÃO (18/11/2026), leia antes do resto:**
 > - A coleta é feita no **Lab-12/DINF, máquina `h52`** (Intel i5-7500), via
 >   `ssh <login>@macalan.c3sl.ufpr.br` e depois `ssh h52`. **Etapa B na mesma `h52`.**
