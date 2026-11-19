@@ -111,6 +111,9 @@ N=512 → 2 MB (cabem na L3), N=1000 → 8 MB (já não cabe na L3 de 6 MB), N=4
 
 ## 7. Conteúdo do `.tar.gz`
 
+O arquivo está no repositório em `resultados_coleta/resultados_nao-otimizado_likwid.tar.gz`
+(extrair com `tar xzf`; no Windows, o `tar` do PowerShell ou o 7-Zip).
+
 - `tempos.csv`: versao, N, rep, total_ms, jacobiana_ms, sl_ms
 - `raw/nao-otimizado_<GRUPO>_<N>.txt`: saída do `likwid-perfctr -m`, regiões newton/jacobiana/sl
 - `topologia.txt`: `likwid-topology -c -g` (seção Arquitetura)
