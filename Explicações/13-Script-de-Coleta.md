@@ -25,8 +25,7 @@ cd Broyden-ICC
 tmux new -s coleta                     # se a conexão cair, a coleta continua
 VERSOES=otimizado ./likwid/roda_testes.sh 2>&1 | tee coleta.log
 ```
-Não precisa de `sudo` no DINF. Se der `bad interpreter` (CRLF): `sed -i 's/
-$//' likwid/roda_testes.sh`.
+Não precisa de `sudo` no DINF. Se der `bad interpreter` (CRLF): `sed -i 's/\r$//' likwid/roda_testes.sh`.
 
 ## O que faz, em ordem
 
