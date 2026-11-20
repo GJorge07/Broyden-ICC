@@ -64,7 +64,7 @@ contendo `Makefile`, `.c`, `.h`, scripts (`.sh`, `.py`) e `relatorio-login1-logi
 | **Arthur** | Solver otimizado (Gauss para matriz tridiagonal / k-diagonal); revisão final |
 | **Apoio (Claude)** | Versão não otimizada, Makefile, entrada/saída, script de coleta, documentação |
 
-## Situação (19/11/2026)
+## Situação (20/11/2026)
 
 | Item | Estado |
 |---|---|
@@ -72,6 +72,6 @@ contendo `Makefile`, `.c`, `.h`, scripts (`.sh`, `.py`) e `relatorio-login1-logi
 | Solver do Arthur | ✅ Pronto e conferido |
 | Coleta LIKWID, Etapa A (não otimizada) | ✅ |
 | Coleta LIKWID, Etapa B (otimizada) | ✅ |
-| 12 gráficos | ⏳ Gabriel |
-| Relatório | ⏳ Gabriel, com revisão do Arthur |
-| Pacote de entrega | ⏳ |
+| 12 gráficos | ✅ `graficos/figuras/` |
+| Relatório | ✅ `relatorio/` (falta a revisão final do Gabriel e do Arthur) |
+| Pacote de entrega | ⏳ montar `gdj25-apn25.tar.gz` (ver 20) |

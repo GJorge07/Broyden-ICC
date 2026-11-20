@@ -49,8 +49,8 @@ def finaliza(titulo, rotulo_y, log_y, arquivo, nota=None):
     plt.grid(True, alpha=0.3)
     plt.legend()
     if nota:
-        plt.figtext(0.01, 0.01, nota, fontsize=8)
-        plt.tight_layout(rect=[0, 0.04, 1, 1])   # deixa espaco embaixo para a nota
+        plt.figtext(0.01, 0.01, nota, fontsize=10)
+        plt.tight_layout(rect=[0, 0.06, 1, 1])   # deixa espaco embaixo para a nota
     else:
         plt.tight_layout()
     plt.savefig('graficos/figuras/' + arquivo)
@@ -70,16 +70,25 @@ def grafico(dados, regiao, coluna, teste, rotulo_y, log_y, arquivo, nota=None):
 
 def grafico_flops(dados, regiao):
     """MFLOP/s: FLOPS_DP (linha cheia) e FLOPS_AVX (tracejada) de cada versao.
-    Eixo Y linear porque FLOPS_AVX e zero em alguns casos (log nao mostra zero)."""
+    Eixo Y em log, porque os valores vao de ~1 a ~8000 MFLOP/s. Zero nao
+    aparece em escala log: uma serie de FLOPS_AVX toda zerada (codigo sem
+    vetorizacao AVX) nao e desenhada e fica indicada na nota do grafico."""
     plt.figure(figsize=(8, 4.5))
+    zerados = []
     for versao, (nome, cor) in VERSOES.items():
         xs, ys = serie(dados, versao, regiao, 'dp_mflops')
         plt.plot(xs, ys, marker='o', color=cor, label='FLOPS_DP (' + nome + ')')
         xs, ys = serie(dados, versao, regiao, 'avx_mflops')
-        plt.plot(xs, ys, marker='s', color=cor, linestyle='--',
-                 label='FLOPS_AVX (' + nome + ')')
-    finaliza('Operações aritméticas – ' + TRECHOS[regiao], 'MFLOP/s', False,
-             'flops_' + regiao + '.pdf')
+        if max(ys) == 0.0:
+            zerados.append(nome.lower().replace('otimizado', 'otimizada'))
+        else:
+            plt.plot(xs, ys, marker='s', color=cor, linestyle='--',
+                     label='FLOPS_AVX (' + nome + ')')
+    nota = None
+    if zerados:
+        nota = 'FLOPS_AVX = 0 em todos os N na versão ' + ' e '.join(zerados) +                ' (não aparece em escala log).'
+    finaliza('Operações aritméticas – ' + TRECHOS[regiao], 'MFLOP/s', True,
+             'flops_' + regiao + '.pdf', nota)
 
 
 def main():

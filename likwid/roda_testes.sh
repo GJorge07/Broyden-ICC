@@ -9,10 +9,10 @@
 # Variaveis opcionais (ex.: NMAX_NAO_OTIM=2000 ./likwid/roda_testes.sh):
 #   NMAX_NAO_OTIM  maior N da versao nao otimizada (padrao 4000)
 #   REPS           repeticoes de cada medicao de tempo (padrao 3)
-#   CORE           nucleo onde o programa roda (padrao 3, exigido no Lab-12)
+#   CORE           nucleo onde o programa roda (padrao 3)
 #   VERSOES        quais versoes medir (padrao "otimizado nao-otimizado").
 #                  Ex.: VERSOES=nao-otimizado ./likwid/roda_testes.sh
-#                  mede so a nao otimizada (nao depende do solver do Arthur)
+#                  mede so a nao otimizada
 #                  e salva em resultados_nao-otimizado/.
 #
 # Saida: pasta resultados/ e o arquivo resultados_likwid.tar.gz
@@ -24,7 +24,7 @@ cd "$(dirname "$0")/.." || exit 1
 MODO="${1:-completo}"
 NMAX_NAO_OTIM="${NMAX_NAO_OTIM:-4000}"
 REPS="${REPS:-3}"
-CORE="${CORE:-3}"   # enunciado: Lab-12/DINF usar SEMPRE o core 3
+CORE="${CORE:-3}"   # nucleo fixo para todas as medicoes
 VERSOES="${VERSOES:-otimizado nao-otimizado}"
 X0=-1         # chute inicial (com 0.5 o Newton nao converge)
 EPS=0          # exigido pelo enunciado
@@ -47,7 +47,7 @@ if [ "$VERSOES" != "otimizado nao-otimizado" ]; then
 fi
 
 log()  { echo "[$(date +%H:%M:%S)] $*"; }
-erro() { echo; echo "ERRO: $*"; echo "Veja Explicações/13-Script-de-Coleta.md"; exit 1; }
+erro() { echo; echo "ERRO: $*"; exit 1; }
 
 rm -rf "$OUT" bin
 mkdir -p "$OUT/raw" bin
@@ -59,20 +59,20 @@ log "Verificando o LIKWID..."
 command -v likwid-perfctr >/dev/null || erro "likwid-perfctr nao encontrado. Instale: sudo apt install likwid"
 
 # Compila com o likwid.h/liblikwid da MESMA instalacao do likwid-perfctr em uso
-# (no DINF: /home/soft/likwid, slide 15). Se nao achar, o Makefile usa /usr/local.
+# Se nao achar, o Makefile usa /usr/local.
 if [ -z "${LIKWID_HOME:-}" ]; then
     LH="$(dirname "$(dirname "$(command -v likwid-perfctr)")")"
     [ -f "$LH/include/likwid.h" ] && LIKWID_HOME="$LH"
 fi
 
-# sudo so e usado se o usuario tiver permissao (ex.: no proprio notebook).
-# Em maquinas sem sudo (ex.: laboratorio via ssh) os passos abaixo sao
+# sudo so e usado se o usuario tiver permissao.
+# Em maquinas sem sudo os passos abaixo sao
 # pulados com um aviso, em vez de travar pedindo uma senha inexistente.
 if sudo -n true 2>/dev/null || id -nG | grep -qwE 'sudo|wheel|admin'; then
     PODE_SUDO=1
 else
     PODE_SUDO=0
-    log "Sem sudo (normal no DINF): msr/perf_event_paranoid ficam como a maquina ja configura"
+    log "Sem sudo: msr/perf_event_paranoid ficam como a maquina ja configura"
 fi
 tenta_sudo() { [ "$PODE_SUDO" = 1 ] && sudo "$@"; }
 
@@ -124,6 +124,10 @@ trap volta_freq EXIT
     echo "LIKWID: $(likwid-perfctr -v 2>&1 | head -1) ($(command -v likwid-perfctr))"
     echo "LIKWID_HOME usado na compilacao: ${LIKWID_HOME:-/usr/local}"
     echo
+    echo "--- uptime e usuarios logados (maquina deve estar exclusiva)"
+    uptime
+    who
+    echo
     echo "--- likwid-setFrequencies -p (frequencias no inicio da coleta)"
     likwid-setFrequencies -p 2>&1
     echo
@@ -173,7 +177,7 @@ if echo " $VERSOES " | grep -q " otimizado "; then
     DIF=$(paste "$OUT/v_otim.tmp" "$OUT/v_nao.tmp" | awk 'BEGIN{m=0; n=0} {d=$1-$2; if(d<0)d=-d; if(d>m)m=d; n++} END{if(n==0) print "vazio"; else print m}')
     rm -f "$OUT"/v_*.tmp
     if [ "$DIF" = "vazio" ] || awk -v d="$DIF" 'BEGIN{exit !(d > 1e-8)}'; then
-        erro "a versao otimizada nao bate com a nao otimizada (diferenca: $DIF). O solver do Arthur (gaussTridiagonal) ja foi implementado?"
+        erro "a versao otimizada nao bate com a nao otimizada (diferenca: $DIF). Confira o gaussTridiagonal."
     fi
     log "OK (maior diferenca: $DIF)"
 else
@@ -189,12 +193,12 @@ for R in newton jacobiana sl; do
         erro "a regiao '$R' nao apareceu na saida do LIKWID (tente rodar com sudo)"
     }
 done
-# Regioes aparecendo nao basta: sem acesso aos contadores (ex.: na macalan)
+# Regioes aparecendo nao basta: sem acesso aos contadores
 # o LIKWID imprime as tabelas com tudo zerado. Exige ciclos > 0.
 if grep -q 'MSR write operation failed' "$OUT/teste_marcadores.txt" || \
    ! awk -F'|' '/CPU_CLK_UNHALTED_CORE/ {v=$4; gsub(/ /,"",v); if (v+0 > 0) ok=1} END {exit !ok}' "$OUT/teste_marcadores.txt"; then
     grep -m5 -E 'ERROR|MSR|CPU_CLK_UNHALTED_CORE' "$OUT/teste_marcadores.txt"
-    erro "os contadores do LIKWID vieram zerados (sem acesso aos MSR). Use uma maquina do Lab-12 (hXX), nao a macalan."
+    erro "os contadores do LIKWID vieram zerados (sem acesso aos MSR). Use uma maquina com acesso aos contadores (nao compartilhada)."
 fi
 log "OK (regioes newton, jacobiana e sl encontradas, contadores com valores)"
 

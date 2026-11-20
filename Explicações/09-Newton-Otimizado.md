@@ -84,8 +84,9 @@ fundido **não vetoriza**, por causa da redução de máximo (precisaria de `-ff
 proibido). Troca-se vetorização por menos passadas na memória. Pela Parte 10 (slide 8), laços
 O(N)/O(N) como este são limitados pela memória, então reduzir passadas é o que importa.
 
-**Por que não fundir F com a norma?** A redução de máximo impediria a vetorização do laço de
-F, que hoje vetoriza.
+**Por que não fundir F com a norma?** Seria a mesma ideia da `atualizaX` (`avaliaMenosF` e o
+`normaMax(F)` logo depois percorrem F duas vezes). Mas a redução de máximo impediria a
+vetorização do laço de F, que hoje vetoriza com AVX. Isso está justificado no relatório (§3.3).
 
 **Por que não fundir F com a Jacobiana** (as duas leem `x[i]`)? O enunciado exige medir a
 Jacobiana **separadamente**. Fundir misturaria os trechos.

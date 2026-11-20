@@ -20,7 +20,7 @@ Compactado como **`gdj25-apn25.tar.gz`** (ou `.zip`). Logins: `gdj25` (Gabriel) 
 | `Makefile`, `main.c`, `newton.c`, `newton_nao_otimizado.c`, `newton.h`, `broyden.c/h`, `jacobiana.c/h`, `sistemas_lineares.c/h`, `utils.c/h`, `likwid_markers.h` | raiz do repositório |
 | `likwid/roda_testes.sh` | script de coleta |
 | `graficos/extrai_dados.py` e `graficos/gera_graficos.py` | scripts dos gráficos (prontos) |
-| `relatorio-gdj25-apn25.pdf` | a fazer |
+| `relatorio-gdj25-apn25.pdf` | pronto em `relatorio/`; no pacote vai na **raiz** |
 
 ## O que não entra
 

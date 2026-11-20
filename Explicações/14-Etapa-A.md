@@ -17,7 +17,7 @@ mesmas condições**, como exige o enunciado.
 | CPU | Intel Core i5-7500 @ 3,40 GHz (Kaby Lake; o LIKWID a chama de "Coffeelake"), 4 núcleos, sem SMT |
 | Caches | L1d 32 kB (8 vias), L2 256 kB (4 vias) por núcleo; L3 6 MB (12 vias, inclusiva, compartilhada); linha de 64 B |
 | Núcleo | 3 |
-| Frequência | governor `performance`, **turbo ligado** (`no_turbo=0`), clock medido ~3,78 GHz |
+| Frequência | governor `performance`, **turbo ligado** (`no_turbo=0`), clock medido entre ~3,66 e 3,82 GHz (Intel HWP ativo) |
 | Software | Debian, kernel 6.12.107, gcc 14.2.0, LIKWID 5.5.2 |
 | Executáveis | idênticos aos gerados com as opções exigidas, `-O3 -march=native -mavx -fopt-info-vec` (ver 03) |
 | Parâmetros | x0 = −1, ε = 0, MAX = 25, 3 repetições |

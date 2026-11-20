@@ -16,7 +16,7 @@
 | Tempo | — (`tempos.csv`) | `total_ms`, `jacobiana_ms`, `sl_ms` | ms, **log** (obrigatório) |
 | Banda de memória | `MEM` | `Memory bandwidth [MBytes/s]` | MB/s, log |
 | Cache miss L2 | `L2CACHE` | `L2 miss ratio` | razão 0–1, linear |
-| Operações aritméticas | `FLOPS_DP` e `FLOPS_AVX` | `DP [MFLOP/s]` e `Packed DP [MFLOP/s]` | MFLOP/s, linear |
+| Operações aritméticas | `FLOPS_DP` e `FLOPS_AVX` | `DP [MFLOP/s]` e `Packed DP [MFLOP/s]` | MFLOP/s, log |
 
 ## Onde estão os dados
 
@@ -69,8 +69,8 @@ Abri os 12 PDFs um por um:
 
 Observações para o texto:
 - a linha da não otimizada termina em N = 4000 (e em 1000 no `mem_newton`, com nota);
-- em `flops_newton` a curva otimizada fica achatada perto de zero, e em `flops_jacobiana` a DP
-  não otimizada também. Citar os valores no texto (tabela 4 do `18`).
+- no MFLOP/s (Y em log), as séries de FLOPS_AVX que são zero em todos os N (`sl` otimizado e
+  `jacobiana` não otimizada) não aparecem, e uma nota abaixo do gráfico avisa isso.
 
 O que é DP e AVX: ver `12-LIKWID-Instrumentacao.md`.
 
@@ -120,13 +120,14 @@ python graficos/gera_graficos.py
 | "Tempo médio" | **Média das 3 repetições** do tempo que o programa imprime (soma das 25 iterações), em ms | É o que o enunciado pede e o valor que o programa mede |
 | Média ou mediana | **Média** | Literal do enunciado. Comentar no texto que, em N = 128 da otimizada, uma repetição foi mais lenta e puxou o ponto para cima |
 | MEM da região `newton`, não otimizada | **Linha termina em N = 1000**; nota no próprio gráfico | Em N = 2000 e 4000 o contador de 32 bits do grupo MEM estourou e o valor medido está errado (ver 14) |
+| Nota do `mem_newton` | fonte 10 (antes 8, ilegível no PDF do relatório) | — |
 | Formato | **12 PDFs separados** | Mais simples no script e no LaTeX; cada gráfico fica ao lado do seu texto |
 | Cores | **Não otimizado = vermelho, otimizado = azul**, iguais em todos os gráficos | O enunciado pede uma cor por versão |
 | Eixo X | **log**, com os 12 N do enunciado como marcas (rótulos na vertical, porque 8000, 9000 e 10000 ficam próximos em log) | Exigido pelo enunciado |
 | Eixo Y do tempo | **log** | Exigido pelo enunciado |
 | Eixo Y da banda (MEM) | **log** | Os valores vão de ~7 a ~126 000 MB/s; em linear, quase tudo ficaria colado no zero |
 | Eixo Y do L2 miss ratio | **linear** | É uma razão entre 0 e 1 |
-| Eixo Y do MFLOP/s | **linear** | O FLOPS_AVX vale **0** em alguns casos (`sl` otimizado, `jacobiana` não otimizada), e zero não aparece em escala log. Em linear, o zero fica visível e mostra a falta de vetorização |
+| Eixo Y do MFLOP/s | **log** (mudou em 20/11; antes era linear) | Os valores vão de ~1 a ~8000 MFLOP/s: em linear, a curva otimizada do `newton` e a DP não otimizada da `jacobiana` ficavam coladas no eixo. Zero não aparece em log, então uma série de FLOPS_AVX toda zerada (`sl` otimizado, `jacobiana` não otimizada) não é desenhada e uma nota abaixo do gráfico avisa |
 | FLOPS_DP e FLOPS_AVX | **No mesmo gráfico**: cor = versão, linha cheia = DP, tracejada = AVX | São 4 gráficos por trecho; os dois grupos do teste de operações aritméticas dividem um |
 | Não otimizada além de N = 4000 | A linha **termina em 4000** | Não foi medida (ver 14); explicar no texto |
 

@@ -31,8 +31,9 @@
 
 ### 3. Turbo ligado
 
-- O enunciado não exige desligar. O governor ficou fixo em `performance` e o clock medido foi
-  estável (~3,78 GHz nas duas etapas).
+- O enunciado não exige desligar. O governor ficou em `performance`; como o Intel HWP está
+  ativo, a frequência não fica totalmente fixa, e o clock medido ficou entre ~3,66 e 3,82 GHz
+  nas duas etapas.
 - **No relatório:** mencionar na metodologia.
 
 ### 4. Banda de memória da região `newton` (não otimizada, N = 2000 e 4000)

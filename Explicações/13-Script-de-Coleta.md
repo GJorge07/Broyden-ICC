@@ -38,7 +38,9 @@ Não precisa de `sudo` no DINF. Se der `bad interpreter` (CRLF): `sed -i 's/\r$/
    - **fixa a frequência**: `likwid-setFrequencies -g performance -c 3`. Um `trap` devolve para
      `powersave` no final, mesmo se o script for interrompido.
 3. **Registra o ambiente** em `sistema.txt` (data, kernel, gcc, flags, governor, turbo, núcleo,
-   parâmetros, máquina, versão do LIKWID, frequências, `lscpu`) e a topologia em
+   parâmetros, máquina, versão do LIKWID, frequências, `uptime` e `who` para registrar se a
+   máquina estava exclusiva, `lscpu`). O `uptime`/`who` foi acrescentado depois das coletas,
+   então não aparece nos `sistema.txt` já coletados e a topologia em
    `topologia.txt` (`likwid-topology -c -g`, exigido para a seção Arquitetura).
 4. **Escolhe os grupos:** MEM (ou L3), L2CACHE (ou L1CACHE/CACHE), FLOPS_DP, FLOPS_AVX. Na
    `h52` todos existem, então nenhuma alternativa foi usada.

@@ -14,7 +14,7 @@
 | 5 | **Faça menos trabalho**: −F calculado direto | `avaliaMenosF` | Elimina o laço de troca de sinal (uma leitura e uma escrita de n doubles a menos por iteração) | Parte 9, slide 10 |
 | 6 | **Fatoração / eliminação de subexpressões**: x·(2x − 3) | `avaliaMenosF` | Uma multiplicação a menos por equação; o compilador não faz por causa da associatividade em ponto flutuante | Parte 9, slides 7 e 20 |
 | 7 | **Fusão de laços** | `atualizaX` | 3 passadas viram 1: cada dado é lido uma vez (localidade temporal), menos controle de laço | Parte 10, slides 9–12 |
-| 8 | **Laços sem desvio** (loop peeling e bordas ignoradas) | `avaliaF`, `avaliaMenosF`, `jacobianaTri`, `jacobianaTriConst` | Sem `if` no corpo, o GCC vetoriza (AVX, 4 doubles por instrução) | Parte 9, slides 14–15 |
+| 8 | **Laços sem desvio** (loop peeling e bordas ignoradas) | `avaliaMenosF`, `jacobianaTri`, `jacobianaTriConst` (o loop peeling já existia em `avaliaF`, da não otimizada; não é diferença entre as versões) | Sem `if` no corpo, o GCC vetoriza (AVX, 4 doubles por instrução) | Parte 9, slides 14–15 |
 | 9 | **`restrict`** (sem aliasing) | `jacobianaTri`, `jacobianaTriConst`, `avaliaMenosF`, `atualizaX`, `gaussTridiagonal` | O GCC vetoriza direto, sem gerar duas versões do laço e testar em tempo de execução | Parte 9, slide 21 |
 | 10 | **`static inline`** | `avaliaMenosF`, `atualizaX` | Elimina o custo de chamada de função | Parte 9, slide 22 |
 | 11 | **Memória alinhada** em 32 B | `alocaVetor` | Acessos SIMD alinhados ao tamanho do registrador AVX | Parte 9, slide 17 |

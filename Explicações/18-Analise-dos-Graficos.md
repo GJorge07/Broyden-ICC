@@ -116,9 +116,12 @@ iguais ao `sl`.
 | 20000 | — | 0,29 | — | 0,31 | — | 0,29 |
 
 **Como interpretar:**
-- Valores de **~0,2–0,3** são típicos de acesso **sequencial**: uma linha de cache tem 8
-  doubles, então só o 1º acesso de cada linha erra. A razão não chega a 1/8 porque o
-  prefetcher e as escritas também contam.
+- Valores de **~0,2–0,3** são típicos de acesso **sequencial** a dados que não ficam na L2: a
+  razão é calculada só sobre os acessos que já erraram na L1, e o prefetcher antecipa apenas
+  parte deles.
+- **N pequeno da otimizada** (ex.: N = 32, ~1 kB de dados, cabe na L1): a razão continua ~0,2
+  porque há pouquíssimos acessos à L2, e eles vêm sobretudo do código e dos dados do próprio
+  LIKWID (marcadores dentro da região `newton`).
 - **Queda forte na não otimizada em N = 128** (0,01 no `sl`): a matriz de 128 kB **cabe
   inteira na L2** de 256 kB. Depois da primeira passada, quase todo acesso acerta na L2. Em
   N = 256 (512 kB) não cabe mais e a razão volta a ~0,2. É o efeito do tamanho do conjunto de
@@ -169,9 +172,16 @@ instruções contadas são as mesmas, só o tempo medido da região muda.)
   úteis, mas escreve N² posições; o tempo cresce com N² e os flops com N.
 - **Jacobiana otimizada**: ~3,5 GFLOP/s, quase tudo **AVX** (vetorizada, sem `if` e com
   `restrict`).
-- **`newton` otimizado em N pequeno** (5 MFLOP/s em N = 32): o custo dos 51 pares de
-  START/STOP do LIKWID dentro da região é maior que o próprio cálculo. Sobe com N à medida que
-  o cálculo passa a dominar. Na não otimizada o efeito é igual em N = 32 (172 MFLOP/s).
+- **`newton` otimizado (todos os N, não só os pequenos)**: os 51 pares de START/STOP do LIKWID
+  dentro da região custam **~3,5–3,9 ms fixos**. Duração da região com LIKWID × tempo sem
+  LIKWID: N = 1000: 3,84 × 0,39 ms; N = 4000: 5,23 × 1,54 ms; N = 20000: 10,53 × 6,64 ms. A
+  subida de 5 para ~1000 MFLOP/s é quase só esse custo sendo diluído. Corrigindo (operações
+  contadas ÷ tempo sem marcadores), a taxa fica quase constante: ~1 300–1 700 MFLOP/s. O mesmo
+  custo subestima a banda (MEM) e entra no L2 da região `newton` otimizada. Na não otimizada o
+  efeito só pesa em N pequeno (N = 32: 172 MFLOP/s); a partir de N = 512 é desprezível.
+- **FLOPS_AVX > FLOPS_DP em alguns pontos** (jacobiana otimizada N = 1000, 2000, 9000; sl não
+  otimizado N = 128): cada grupo é uma execução separada, e em regiões de microssegundos
+  (16 µs na jacobiana em N = 1000) o tempo medido varia. Não são mais operações AVX que totais.
 - **Pico teórico ~60 GFLOP/s**: nenhuma região chega perto. O `sl` denso fica em ~14 % do
   pico; o limite real está em carregar e gravar a matriz.
 

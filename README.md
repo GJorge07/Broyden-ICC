@@ -32,3 +32,10 @@ tar xzf resultados_coleta/resultados_otimizado_likwid.tar.gz
 python graficos/extrai_dados.py
 python graficos/gera_graficos.py
 ```
+
+## Repositório × entrega
+
+Este repositório guarda **tudo** o que foi usado no trabalho. O pacote entregue no Moodle
+(`gdj25-apn25.tar.gz`) contém só o que o enunciado pede: `Makefile`, `*.c`, `*.h`,
+`likwid/roda_testes.sh`, `graficos/*.py` e `relatorio-gdj25-apn25.pdf` (na raiz do pacote).
+`Explicações/`, `likwid/NOTAS_*`, o `.docx`, as figuras e este README ficam só no repositório.
