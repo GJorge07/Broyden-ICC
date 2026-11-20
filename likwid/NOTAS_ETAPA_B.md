@@ -71,7 +71,7 @@ da L3 de 6 MB.
   o `sl` chegava a ~24,6 GB/s.
 - **FLOPS_DP / FLOPS_AVX**:
   - `jacobiana` (só `diag[i] = -4x[i] + 3`): vetorizada, ~3,5 GFLOP/s em N=20000, quase tudo AVX.
-  - `sl` (Gauss tridiagonal, algoritmo de Thomas): ~1,0 GFLOP/s e **AVX = 0**. Cada linha
+  - `sl` (Gauss tridiagonal): ~1,0 GFLOP/s e **AVX = 0**. Cada linha
     depende da anterior (dependência entre iterações), então o laço não vetoriza. O
     `compilacao.log` mostra só uma vetorização parcial de bloco básico em
     `sistemas_lineares.c:67`. Isso não é erro.

@@ -99,7 +99,7 @@ dela simplesmente termina em 4000; justifique no relatório.
 2. **Banda de memória da versão otimizada é baixa e ruidosa em todos os N**: os dados cabem na
    L3 (≤ 4,3 MB de tráfego), e o contador é do socket inteiro. É esperado e é o contraste com a
    não otimizada, que chega a ~24,6 GB/s.
-3. **`sl` da versão otimizada tem AVX = 0**: o algoritmo de Thomas tem dependência entre
+3. **`sl` da versão otimizada tem AVX = 0**: o Gauss tridiagonal tem dependência entre
    iterações e não vetoriza. Não é erro.
 4. **MFLOP/s da região `newton` em N pequeno** é baixo nas duas versões: o custo dos marcadores
    LIKWID dentro da região domina quando o trabalho é de microssegundos.
