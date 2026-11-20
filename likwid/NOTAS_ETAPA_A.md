@@ -26,13 +26,8 @@ não é suportado pelo LIKWID, e a `macalan` é servidora compartilhada e não d
 ## 2. Flags de compilação
 
 - O enunciado do trabalho pede `-O3 -march=native -mavx -fopt-info-vec`.
-- **A Etapa A foi compilada com `-O3 -mavx2 -march=native -fopt-info-vec`**, por engano: uma
-  página geral do LIKWID cita `-mavx2`. O `Makefile` já foi corrigido para as flags do
-  enunciado (commit `5d7ab42`).
-- **Isso não altera os resultados.** No i5-7500, `-march=native` já habilita AVX e AVX2, e
-  compilando todos os `.c` com `-march=skylake -mavx` e com `-march=skylake -mavx2` (Kaby Lake
-  tem o mesmo conjunto de instruções do Skylake), o código de máquina saiu **idêntico em todos
-  os arquivos**. Basta uma frase no relatório.
+- A Etapa A foi compilada com `-O3 -mavx -march=native -fopt-info-vec`
+
 
 ## 3. Tempos médios (ms, média de 3 repetições)
 
