@@ -72,8 +72,9 @@ multiplicação (latência ~4–5× maior), então troca n−1 divisões por mul
 
 ### Custo
 
-O(n): dois laços de n passos, ≈ 8n flops por chamada, contra ≈ ⅔n³ do Gauss denso. Em
-N = 4000: ~32 mil flops contra ~43 bilhões.
+O(n): dois laços de n passos, ≈ 9n flops por chamada (6 por linha na ida, 3 na volta;
+confirmado pelo LIKWID: 9,0 flops escalares por linha), contra ≈ ⅔n³ do Gauss denso. Em
+N = 4000: ~36 mil flops contra ~43 bilhões.
 
 ### Por que sem pivoteamento
 

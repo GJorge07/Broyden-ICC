@@ -26,8 +26,8 @@ Em ponto flutuante a ordem das operações muda o arredondamento (slide 20 da Pa
 
 ## Com x0 = 0,5 as versões divergem
 
-Com x0 = 0,5 o Newton não converge e oscila de forma caótica. Qualquer diferença de
-arredondamento cresce a cada iteração, e as saídas das duas versões se afastam. Por isso a
+Com x0 = 0,5 o Newton não converge: o primeiro passo leva os valores a ordens de grandeza
+enormes. Nessa situação qualquer diferença de arredondamento cresce, e as saídas das duas versões se afastam. Por isso a
 comparação é feita com x0 = −1.
 
 ## Como repetir

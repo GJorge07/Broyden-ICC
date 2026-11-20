@@ -162,7 +162,7 @@ instruções contadas são as mesmas, só o tempo medido da região muda.)
   (recorrência, ver 07).
 - **Contradição aparente (o ponto mais importante do relatório):** o `sl` otimizado tem
   **4× menos MFLOP/s** (em N = 4000) e é **~270 000× mais rápido**. MFLOP/s mede o **ritmo** das contas,
-  não a velocidade da solução. A versão otimizada faz ~8N flops por chamada em vez de ~⅔N³.
+  não a velocidade da solução. A versão otimizada faz ~9N flops por chamada em vez de ~⅔N³.
   Fazer muito menos trabalho vale mais do que fazer o trabalho rápido: MFLOP/s sozinho não
   diz qual versão é melhor; quem decide é o tempo.
 - **Jacobiana não otimizada**: MFLOP/s **cai** com N (171 → 1,6) e AVX = 0. Ela faz 2N flops

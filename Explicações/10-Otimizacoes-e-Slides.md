@@ -80,7 +80,7 @@ baseline. O ganho real vem de **não usar** a matriz densa.
 | Trecho | Estimativa | Leitura |
 |---|---|---|
 | `jacobianaTri` | lê x[i] (8 B), escreve diag[i] (8 B + 8 B de write-allocate) para 2 flops | ~8–12 B/flop → limitado pela memória quando não cabe na cache |
-| Gauss tridiagonal | ~8 flops para ~6 doubles (~48 B) por linha | ~6 B/flop |
+| Gauss tridiagonal | ~9 flops para ~6 doubles (~48 B) por linha | ~5 B/flop |
 | Gauss denso | O(N²) dados para O(N³) flops | B_C cai com N → limitado pelo cálculo enquanto a matriz cabe na cache |
 
 - **Write-allocate (slide 6):** antes de escrever, a CPU traz a linha de cache da memória.

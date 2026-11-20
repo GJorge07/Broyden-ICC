@@ -76,8 +76,9 @@ Matriz diagonalmente dominante → Gauss sem pivoteamento é estável (ver 07).
 ## Chute inicial x0
 
 O enunciado não fixa x0. Testes:
-- **x0 = 0,5**: o Newton **não converge**; oscila nas 25 iterações (‖F‖ final ≈ 3,7).
-  Confirmado com uma implementação independente em Python. Não é bug: o Newton só converge
+- **x0 = 0,5**: o Newton **não converge**. Nesse ponto a diagonal da Jacobiana vale
+  −4·0,5 + 3 = 1, e já o primeiro passo leva os valores a ordens de grandeza enormes (~10⁴ em
+  N = 32, ~10¹⁴⁹ em N = 1000); o método não se recupera nas 25 iterações. Não é bug: o Newton só converge
   se o chute estiver perto o bastante da raiz.
 - **x0 = −1**: converge em **5 iterações** (ε = 1e−10, N = 4 e N = 1000).
 

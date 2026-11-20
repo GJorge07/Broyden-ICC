@@ -54,6 +54,8 @@ def finaliza(titulo, rotulo_y, log_y, arquivo, nota=None):
     else:
         plt.tight_layout()
     plt.savefig('graficos/figuras/' + arquivo)
+    # versao PNG para inserir no relatorio (Word)
+    plt.savefig('graficos/figuras/' + arquivo.replace('.pdf', '.png'), dpi=200)
     plt.close()
 
 

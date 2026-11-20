@@ -1,5 +1,15 @@
 # 19. Relatório: estrutura do artigo e o que escrever
 
+> **Situação (20/11):** o relatório está em `relatorio/relatorio-gdj25-apn25.docx` (Word,
+> editável também no Google Docs) e `relatorio/relatorio-gdj25-apn25.pdf` (exportado pelo
+> Word), com 15 páginas, 12 figuras e 3 tabelas. Organização: cabeçalho, Resumo,
+> 1 Introdução, 2 O problema e o método, 3 Implementação e otimizações (3.1 estrutura de dados
+> e Jacobiana, 3.2 método dos sistemas lineares, 3.3 outras otimizações, Tabela 1), 4
+> Metodologia (4.1 arquitetura, Tabela 2; 4.2 parâmetros; 4.3 medições; 4.4 limitações),
+> 5 Resultados (5.1 tempo, Tabela 3; 5.2 banda; 5.3 L2; 5.4 MFLOP/s; um parágrafo por figura),
+> 6 Conclusão e Referências. Depois de editar o `.docx`, exportar de novo para PDF
+> (Arquivo → Salvar como → PDF) com o nome `relatorio-gdj25-apn25.pdf`.
+
 Formato de **artigo científico** (o enunciado não fixa o modelo; um template de artigo em
 LaTeX, por exemplo o da SBC, funciona bem). Nome do arquivo:
 **`relatorio-gdj25-apn25.pdf`**.

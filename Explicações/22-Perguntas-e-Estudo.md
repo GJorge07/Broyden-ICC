@@ -50,7 +50,7 @@ A ordem das operações mudou (fatoração, multiplicar pelo inverso), e em pont
 associatividade não vale.
 
 **Por que a versão otimizada tem MFLOP/s menor e é mais rápida?**
-MFLOP/s mede o ritmo das contas. A otimizada faz ~8n flops em vez de ~⅔n³; menos trabalho
+MFLOP/s mede o ritmo das contas. A otimizada faz ~9n flops em vez de ~⅔n³; menos trabalho
 vale mais que trabalho rápido.
 
 **Por que a banda da não otimizada salta em N = 1000?**
