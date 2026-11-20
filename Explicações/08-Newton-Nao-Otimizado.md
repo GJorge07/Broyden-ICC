@@ -62,4 +62,4 @@ São 5 passadas. A versão otimizada reduz para 2 (ver 09).
 | Gauss denso | O(n³) | (in-place) |
 | Resto | O(n) | — |
 
-O sistema linear domina: **mais de 99,9 % do tempo a partir de N = 512** (dados da Etapa A).
+O sistema linear domina: **mais de 99 % do tempo a partir de N = 512** (99,96 % em N = 4000) (dados da Etapa A).

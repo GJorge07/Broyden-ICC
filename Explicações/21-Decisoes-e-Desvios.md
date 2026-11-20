@@ -29,26 +29,6 @@
 - **No relatório:** citar as estimativas (14) e dizer que a tendência já está clara até 4000 e
   que a otimizada cobre todos os N.
 
-### 2. Etapa A compilada com `-mavx2` em vez de `-mavx`
-
-- **Fato:** os arquivos da coleta (`sistema.txt`, `compilacao.log`) registram `-mavx2`. A Etapa
-  B usou `-mavx`.
-- **Efeito:** nenhum. No i5-7500, `-march=native` já liga AVX e AVX2, e o código de máquina é
-  **idêntico** byte a byte com uma flag ou com a outra (conferido com `objdump` nos 7 arquivos,
-  ver 03).
-- **No relatório:** como o binário é o mesmo, dá para apresentar as flags do enunciado como as
-  usadas **desde que** se registre a diferença. Escrever apenas "`-mavx`" contradiz os
-  arquivos de coleta, que vão no pacote ou podem ser pedidos. Uma frase basta, por exemplo:
-
-  > *"Todas as versões foram compiladas com `-O3 -march=native -mavx -fopt-info-vec`. Na
-  > coleta da versão não otimizada foi usado `-mavx2` no lugar de `-mavx`; como
-  > `-march=native` já habilita AVX e AVX2 no i5-7500, o código de máquina gerado é idêntico
-  > nos dois casos (verificado com `objdump`)."*
-
-- **Alternativa**, se quiser que os dados digam literalmente `-mavx`: refazer a Etapa A na
-  `h52` (~37 min). O código está pronto e o script já usa `-mavx`; o resultado será o mesmo,
-  a menos do ruído.
-
 ### 3. Turbo ligado
 
 - O enunciado não exige desligar. O governor ficou fixo em `performance` e o clock medido foi

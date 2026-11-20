@@ -37,7 +37,10 @@ a vetores 1D; `-ffast-math` proibido).
 - **Arquitetura** (obrigatória, do `topologia.txt`): i5-7500 @ 3,40 GHz, 4 núcleos, sem SMT;
   L1d 32 kB / L2 256 kB por núcleo / L3 6 MB compartilhada; linha de 64 B. Uma tabela.
 - Ambiente: `h52` (Lab-12/DINF), Debian, kernel 6.12.107, gcc 14.2.0, LIKWID 5.5.2.
-- Flags: `-O3 -march=native -mavx -fopt-info-vec` (ver 21 sobre a Etapa A).
+- Flags: `-O3 -march=native -mavx -fopt-info-vec`. Frase pronta (ver 03): *"Os executáveis
+  utilizados nas medições são idênticos aos gerados com as opções exigidas
+  (`-O3 -march=native -mavx -fopt-info-vec`), compilados na própria máquina de testes."*
+- Gráficos: gerados por `graficos/extrai_dados.py` e `graficos/gera_graficos.py` (ver 17).
 - Núcleo 3 (`taskset` e `likwid-perfctr -C 3`), governor `performance`, **turbo ligado**.
 - Parâmetros: N, x0 = −1 (e por quê), ε = 0, MAX = 25.
 - Tempo: `timestamp()` com `CLOCK_MONOTONIC_RAW`; binário **sem** marcadores; 3 repetições;

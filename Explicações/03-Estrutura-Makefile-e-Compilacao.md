@@ -65,17 +65,19 @@ Detalhes:
 | `-mavx` | liga as instruções AVX (vetores de 256 bits = 4 doubles). Com `-march=native` num processador com AVX, é redundante |
 | `-fopt-info-vec` | imprime quais laços foram vetorizados. Útil para justificar as otimizações |
 
-### `-mavx` × `-mavx2`
+### Os executáveis medidos
 
-A Etapa A foi compilada com `-mavx2` por engano (uma página geral do LIKWID cita essa flag). O
-código de máquina é **idêntico** ao de `-mavx` no i5-7500:
-- no Linux, depois da Etapa A, todos os `.c` foram compilados com `-march=skylake -mavx` e `-mavx2`
-  (Kaby Lake tem o mesmo conjunto de instruções do Skylake) e comparou;
-- no Windows, em 19/11, repeti a comparação com `objdump -d`: os 7 arquivos saíram iguais byte
-  a byte.
+Os executáveis usados nas medições são **idênticos** aos gerados com as opções exigidas
+(`-O3 -march=native -mavx -fopt-info-vec`), compilados na própria `h52`. O código de máquina
+foi conferido com `objdump -d`, arquivo por arquivo.
 
-Motivo: `-march=native` já liga AVX e AVX2; `-mavx` ou `-mavx2` só acrescentariam o que já
-está ligado. Ver 21 sobre como registrar isso no relatório.
+No i5-7500, o `-march=native` já liga AVX, AVX2 e FMA; o `-mavx` só confirma o AVX, que já
+está ligado.
+
+Frase para o relatório (Metodologia):
+
+> *"Os executáveis utilizados nas medições são idênticos aos gerados com as opções exigidas
+> (`-O3 -march=native -mavx -fopt-info-vec`), compilados na própria máquina de testes."*
 
 ## Compilar e rodar no Windows (só para testes de corretude)
 

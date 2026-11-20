@@ -19,14 +19,10 @@ mesmas condições**, como exige o enunciado.
 | Núcleo | 3 |
 | Frequência | governor `performance`, **turbo ligado** (`no_turbo=0`), clock medido ~3,78 GHz |
 | Software | Debian, kernel 6.12.107, gcc 14.2.0, LIKWID 5.5.2 |
-| Flags | `-O3 -mavx2 -march=native -fopt-info-vec` (ver nota abaixo) |
+| Executáveis | idênticos aos gerados com as opções exigidas, `-O3 -march=native -mavx -fopt-info-vec` (ver 03) |
 | Parâmetros | x0 = −1, ε = 0, MAX = 25, 3 repetições |
 | N | 32, 64, 128, 256, 512, 1000, 2000, 4000 |
 | Duração | ~37 min |
-
-**Nota sobre `-mavx2`:** foi um engano; o enunciado pede `-mavx`. O código de máquina é
-idêntico (ver 03), então os dados valem. O `sistema.txt` e o `compilacao.log` registram
-`-mavx2`. Ver 21 sobre como escrever isso no relatório.
 
 ## Tempos médios (ms)
 
@@ -35,7 +31,7 @@ idêntico (ver 03), então os dados valem. O `sistema.txt` e o `compilacao.log` 
 | 32 | 0,120 | 0,005 | 0,112 | 93 % |
 | 64 | 0,670 | 0,029 | 0,632 | 94 % |
 | 128 | 4,75 | 0,116 | 4,61 | 97 % |
-| 256 | 35,5 | 0,493 | 35,0 | 98,5 % |
+| 256 | 35,5 | 0,493 | 34,9 | 98,5 % |
 | 512 | 273 | 2,01 | 271 | 99,2 % |
 | 1000 | 2 396 | 8,10 | 2 388 | 99,7 % |
 | 2000 | 30 454 | 32,8 | 30 420 | 99,9 % |

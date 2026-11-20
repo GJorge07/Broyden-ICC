@@ -14,9 +14,9 @@
 | Teste | Grupo LIKWID | Métrica exata no arquivo | Eixo Y |
 |---|---|---|---|
 | Tempo | — (`tempos.csv`) | `total_ms`, `jacobiana_ms`, `sl_ms` | ms, **log** (obrigatório) |
-| Banda de memória | `MEM` | `Memory bandwidth [MBytes/s]` | MB/s (sugestão: log) |
-| Cache miss L2 | `L2CACHE` | `L2 miss ratio` | razão 0–1 (sugestão: linear) |
-| Operações aritméticas | `FLOPS_DP` e `FLOPS_AVX` | `DP [MFLOP/s]` e `Packed DP [MFLOP/s]` | MFLOP/s (sugestão: log) |
+| Banda de memória | `MEM` | `Memory bandwidth [MBytes/s]` | MB/s, log |
+| Cache miss L2 | `L2CACHE` | `L2 miss ratio` | razão 0–1, linear |
+| Operações aritméticas | `FLOPS_DP` e `FLOPS_AVX` | `DP [MFLOP/s]` e `Packed DP [MFLOP/s]` | MFLOP/s, linear |
 
 ## Onde estão os dados
 
@@ -52,49 +52,61 @@ versão, o grupo e o N vêm do nome do arquivo.
 
 Um leitor desse jeito foi testado em 19/11 e leu os 300 valores sem nenhuma falha.
 
-## Ferramenta
+## Como os gráficos foram feitos
 
-O enunciado não exige ferramenta, mas o **script que gera os gráficos vai no pacote de
-entrega** (`.py`, `.sh` ou `.pl`). Sugestão: Python + matplotlib.
+Python + matplotlib, em **dois passos**:
 
-```powershell
-pip install matplotlib         # ainda não está instalado neste computador
+```
+tempos.csv + raw/*.txt  --extrai_dados.py-->  graficos/dados.csv  --gera_graficos.py-->  graficos/figuras/*.pdf
 ```
 
-Esqueleto do raciocínio (para escrever o script):
-1. ler os dois `tempos.csv` e calcular, por (versão, N), a média (ou mediana) das 3
-   repetições de cada coluna;
-2. ler os `raw` como descrito acima;
-3. para cada trecho e cada teste, fazer um gráfico com uma linha por versão:
-   `plt.xscale('log')`, `plt.yscale('log')` quando for o caso, marcadores nos pontos,
-   legenda, título, rótulos com unidade;
-4. salvar como PDF ou PNG (PDF fica melhor no LaTeX, porque é vetorial).
+Para rodar, na raiz do projeto:
+```powershell
+pip install matplotlib
+tar xzf resultados_coleta/resultados_nao-otimizado_likwid.tar.gz
+tar xzf resultados_coleta/resultados_otimizado_likwid.tar.gz
+python graficos/extrai_dados.py
+python graficos/gera_graficos.py
+```
 
-## Decisões a tomar (e registrar no relatório)
+### `graficos/extrai_dados.py`
 
-1. **"Tempo médio".**
-   - **(a) Média das 3 repetições do tempo somado das 25 iterações** (recomendado, é o valor
-     que o programa imprime).
-   - (b) A mesma média dividida pelo número de chamadas, para tempo por chamada. Atenção: a
-     Jacobiana otimizada tem 26 chamadas (ver 06).
+- `le_tempos(pasta)`: lê o `tempos.csv` e faz a **média das 3 repetições** de cada N. O
+  `newton` usa a coluna `total_ms`, a `jacobiana` usa `jacobiana_ms` e o `sl` usa `sl_ms`.
+- `le_metrica(arquivo, metrica)`: lê uma saída do LIKWID. Guarda a região atual ao ver
+  `Region <nome>, Group` e, nas linhas de tabela (`| métrica | valor |`), pega o valor da
+  métrica procurada. Devolve `{regiao: valor}`.
+- Grava `graficos/dados.csv`, uma linha por (versão, região, N):
+  `versao,regiao,N,tempo_ms,mem_mbs,l2_miss,dp_mflops,avx_mflops`. A não otimizada tem 8 N
+  por região e a otimizada tem 12.
+- **Para conferir qualquer ponto de um gráfico, basta abrir o `dados.csv`** (ele também está
+  no git).
 
-   Em log-log, (a) e (b) têm o mesmo formato, só deslocados.
-2. **Média ou mediana** das repetições. A média é literalmente o que o enunciado pede; o
-   ponto de N = 128 da otimizada fica um pouco alto (uma repetição lenta). A mediana elimina
-   isso, mas precisa de justificativa. Recomendado: média, com comentário sobre N = 128.
-3. **FLOPS_DP e FLOPS_AVX no mesmo gráfico** (são 4 gráficos por trecho, então os dois
-   grupos dividem um). Sugestão: cor = versão, estilo = grupo (linha cheia para DP, tracejada
-   para AVX). São 4 linhas.
-4. **A versão não otimizada só vai até N = 4000.** A linha dela termina ali; explicar no texto
-   e na legenda ou numa nota.
-5. **MEM da região `newton` na não otimizada em N = 2000 e 4000:** valores errados por
-   estouro do contador (ver 14). Opções:
-   - corrigir (21,5 e 24,6 GB/s), avisando que foram corrigidos;
-   - parar a linha em N = 1000.
+### `graficos/gera_graficos.py`
 
-   Não plotar os valores crus.
-6. **Escala Y** dos testes que não são de tempo: livre. MEM e FLOPS variam ordens de grandeza
-   entre as versões, então log ajuda; miss ratio fica melhor em linear.
+- `serie(...)`: separa do `dados.csv` os pontos (N, valor) de uma versão e de uma região.
+- `grafico(...)`: gráfico com uma linha por versão (tempo, MEM e L2).
+- `grafico_flops(...)`: gráfico com 4 linhas (DP e AVX de cada versão).
+- `finaliza(...)`: eixos, legenda e grade, iguais em todos os gráficos; salva o PDF.
+- Gera os 12 arquivos em `graficos/figuras/`: `tempo_<trecho>.pdf`, `mem_<trecho>.pdf`,
+  `l2_<trecho>.pdf` e `flops_<trecho>.pdf`, com trecho = `newton`, `jacobiana` ou `sl`.
+
+## Decisões tomadas (registrar no relatório)
+
+| Decisão | Escolha | Motivo |
+|---|---|---|
+| "Tempo médio" | **Média das 3 repetições** do tempo que o programa imprime (soma das 25 iterações), em ms | É o que o enunciado pede e o valor que o programa mede |
+| Média ou mediana | **Média** | Literal do enunciado. Comentar no texto que, em N = 128 da otimizada, uma repetição foi mais lenta e puxou o ponto para cima |
+| MEM da região `newton`, não otimizada | **Linha termina em N = 1000**; nota no próprio gráfico | Em N = 2000 e 4000 o contador de 32 bits do grupo MEM estourou e o valor medido está errado (ver 14) |
+| Formato | **12 PDFs separados** | Mais simples no script e no LaTeX; cada gráfico fica ao lado do seu texto |
+| Cores | **Não otimizado = vermelho, otimizado = azul**, iguais em todos os gráficos | O enunciado pede uma cor por versão |
+| Eixo X | **log**, com os 12 N do enunciado como marcas (rótulos na vertical, porque 8000, 9000 e 10000 ficam próximos em log) | Exigido pelo enunciado |
+| Eixo Y do tempo | **log** | Exigido pelo enunciado |
+| Eixo Y da banda (MEM) | **log** | Os valores vão de ~7 a ~126 000 MB/s; em linear, quase tudo ficaria colado no zero |
+| Eixo Y do L2 miss ratio | **linear** | É uma razão entre 0 e 1 |
+| Eixo Y do MFLOP/s | **linear** | O FLOPS_AVX vale **0** em alguns casos (`sl` otimizado, `jacobiana` não otimizada), e zero não aparece em escala log. Em linear, o zero fica visível e mostra a falta de vetorização |
+| FLOPS_DP e FLOPS_AVX | **No mesmo gráfico**: cor = versão, linha cheia = DP, tracejada = AVX | São 4 gráficos por trecho; os dois grupos do teste de operações aritméticas dividem um |
+| Não otimizada além de N = 4000 | A linha **termina em 4000** | Não foi medida (ver 14); explicar no texto |
 
 ## Dicas de apresentação
 

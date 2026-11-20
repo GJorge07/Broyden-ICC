@@ -1,6 +1,6 @@
 # 18. Análise dos gráficos: os números e como interpretar
 
-Valores extraídos dos dados da `h52`. Tempos = média das 3 repetições. "—" = não medido.
+Valores extraídos dos dados da `h52` (são os mesmos de `graficos/dados.csv`, arredondados). Tempos = média das 3 repetições. "—" = não medido.
 Use estas tabelas para **conferir** se os gráficos saíram certos e como base do texto.
 
 Referências da máquina:
@@ -24,7 +24,7 @@ Tamanho dos dados:
 | 32 | 0,120 | 0,0108 | 0,00485 | 0,00084 | 0,112 | 0,0070 |
 | 64 | 0,670 | 0,0216 | 0,0290 | 0,00093 | 0,632 | 0,0136 |
 | 128 | 4,75 | 0,0508 | 0,116 | 0,0054 | 4,61 | 0,0312 |
-| 256 | 35,5 | 0,0871 | 0,493 | 0,0016 | 35,0 | 0,0527 |
+| 256 | 35,5 | 0,0871 | 0,493 | 0,0016 | 34,9 | 0,0527 |
 | 512 | 273 | 0,217 | 2,01 | 0,0037 | 271 | 0,142 |
 | 1000 | 2 396 | 0,393 | 8,10 | 0,0065 | 2 388 | 0,254 |
 | 2000 | 30 454 | 0,842 | 32,8 | 0,0177 | 30 420 | 0,568 |
@@ -39,12 +39,13 @@ Tamanho dos dados:
   - `sl` não otimizado: inclinação ~3 (×8 quando N dobra);
   - `jacobiana` não otimizada: ~2 (×4);
   - na otimizada, tudo ~1 (×2).
-- O `newton` não otimizado praticamente coincide com o `sl`: o SL é >99,9 % do tempo a partir
-  de N = 512.
+- O `newton` não otimizado praticamente coincide com o `sl`: o SL passa de 99 % do tempo a partir
+  de N = 512 (99,2 % em 512, 99,96 % em 4000).
 - O speedup cresce com N: ~11× em N = 32 e **~175 000×** em N = 4000.
-- Na otimizada, N pequeno (32–256) tem inclinação menor que 1: um custo fixo (chamadas de
-  função, `timestamp()`, laços muito curtos), que não depende de N, domina quando o trabalho
-  é de microssegundos.
+- Na `jacobiana` otimizada, N pequeno (32–256) tem inclinação menor que 1 (o tempo cresce
+  só ~1,9× enquanto N cresce 8×): um custo fixo (chamadas, `timestamp()`, laço muito curto),
+  que não depende de N, domina quando o trabalho é de microssegundos. No `newton` e no `sl`
+  a inclinação já é ~1 desde N = 32.
 - Ponto fora da curva: `jacobiana` otimizada em N = 128 (uma repetição lenta, ver 15).
 - Na otimizada, `newton` ≈ 1,5 × (`sl` + `jacobiana`): o resto do Newton (F, normas,
   atualização) também é O(N) e passa a aparecer.
@@ -61,15 +62,17 @@ Tamanho dos dados:
 | 256 | 25 | 82 | 445 | 15 130 | 22 | 1 313 |
 | 512 | 10 | 71 | 398 | 13 230 | 6,7 | 600 |
 | 1000 | 6 727 | 66 | 14 460 | 6 222 | 6 726 | 895 |
-| 2000 | (estouro) | 70 | 23 990 | 3 491 | 21 520 | 179 |
-| 4000 | (estouro) | 72 | 26 560 | 3 248 | 24 580 | 93 |
+| 2000 | (omitido) | 70 | 23 990 | 3 491 | 21 520 | 179 |
+| 4000 | (omitido) | 72 | 26 560 | 3 248 | 24 580 | 93 |
 | 8000 | — | 122 | — | 1 410 | — | 58 |
 | 9000 | — | 182 | — | 1 495 | — | 67 |
 | 10000 | — | 254 | — | 2 827 | — | 90 |
 | 20000 | — | 274 | — | 726 | — | 163 |
 
-`newton` não otimizado em N = 2000 e 4000: os valores crus (12 460 e 1 093) estão errados.
-Corrigidos: ~21 500 e ~24 600 MB/s (ver 14).
+`newton` não otimizado em N = 2000 e 4000: os valores medidos (12 460 e 1 093) estão errados
+por estouro do contador (ver 14). **No gráfico a linha termina em N = 1000**, com uma nota.
+Se perguntarem: corrigindo as voltas perdidas daria ~21 500 e ~24 600 MB/s, praticamente
+iguais ao `sl`.
 
 **Como interpretar:**
 - **Não otimizada, N ≤ 512:** a matriz cabe na cache (L2 até N = 128, L3 até N = 512), então
@@ -80,9 +83,12 @@ Corrigidos: ~21 500 e ~24 600 MB/s (ver 14).
 - **Jacobiana densa** chega a 26,6 GB/s: ela só **escreve** (zera 128 MB por iteração em
   N = 4000). A banda é quase toda de "evict" (escrita de volta), o que mostra o
   write-allocate.
-- **Otimizada:** tudo cabe na L3 (no máximo ~4,3 MB, contando o histórico de 26 iterações),
-  então o tráfego com a RAM é **desprezível** e a banda medida é baixa em N grande. Isso é
-  bom: a versão otimizada não depende da memória.
+- **Otimizada:** os vetores de trabalho (4 × 8N B = 640 kB em N = 20000) cabem na cache, então
+  o tráfego com a RAM é **desprezível**: o volume total da região `newton` em N = 20000 é só
+  ~4,3 MB. Esse volume é praticamente o tamanho do histórico (26 × 8N B ≈ 4,2 MB), que é
+  escrito uma vez e acaba indo para a RAM. Por isso a banda do `newton` **sobe** um pouco a
+  partir de N = 8000 (66 → 274 MB/s), mas continua irrisória perto dos ~24 600 MB/s da não
+  otimizada. Isso é bom: a versão otimizada não depende da memória.
 - **Valores absurdos (!) na otimizada em N pequeno** (126 GB/s, acima do máximo físico da
   DDR4): **não são reais**. A região `jacobiana` otimizada dura poucos microssegundos no total
   e o contador MEM é do **socket inteiro**. Qualquer tráfego de fundo, ou um punhado de linhas
@@ -144,7 +150,8 @@ Corrigidos: ~21 500 e ~24 600 MB/s (ver 14).
 | 20000 | — | 997 / 437 | — | 3 544 / 3 412 | — | 1 072 / 0 |
 
 (DP e AVX vêm de **execuções diferentes**, uma por grupo; por isso AVX às vezes passa
-ligeiramente de DP.)
+de DP, até ~13 % nas regiões de microssegundos, como a `jacobiana` otimizada em N = 1000: as
+instruções contadas são as mesmas, só o tempo medido da região muda.)
 
 **Como interpretar:**
 - **`sl` não otimizado**: sobe até **~8,3 GFLOP/s** em N = 256–512 (matriz na cache, laço

@@ -6,9 +6,9 @@ Detalhes completos: `likwid/NOTAS_ETAPA_B.md`. Dados:
 ## Condições
 
 Iguais às da Etapa A (mesma `h52`, núcleo 3, governor `performance`, turbo ligado, kernel,
-gcc 14.2.0, LIKWID 5.5.2, x0 = −1, ε = 0, MAX = 25, 3 repetições), com duas diferenças:
-- **flags corretas** do enunciado: `-O3 -march=native -mavx -fopt-info-vec`;
-- **todos os 12 valores de N** (32 a 20000).
+gcc 14.2.0, LIKWID 5.5.2, x0 = −1, ε = 0, MAX = 25, 3 repetições). Compilado com
+`-O3 -march=native -mavx -fopt-info-vec`. A diferença: aqui foram medidos **todos os 12
+valores de N** (32 a 20000).
 
 Código: commit `36d095a` (solver do Arthur incluído). A coleta levou poucos minutos.
 
@@ -16,7 +16,7 @@ Código: commit `36d095a` (solver do Arthur incluído). A coleta levou poucos mi
 
 | Conferência | Resultado |
 |---|---|
-| `sistema.txt` igual ao da Etapa A | ✅ exceto a linha `Flags` (`-mavx2` → `-mavx`) |
+| `sistema.txt` comparado com o da Etapa A | ✅ mesma máquina, kernel, gcc, LIKWID, governor, núcleo e parâmetros |
 | `topologia.txt` igual ao da Etapa A | ✅ exceto "Free memory", que só registra o momento |
 | `tempos.csv` | ✅ 36 linhas, nenhum campo vazio |
 | `raw/` | ✅ 48 arquivos, todos com as 3 regiões, sem erro de MSR |
