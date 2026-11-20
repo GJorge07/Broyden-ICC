@@ -47,7 +47,7 @@ if [ "$VERSOES" != "otimizado nao-otimizado" ]; then
 fi
 
 log()  { echo "[$(date +%H:%M:%S)] $*"; }
-erro() { echo; echo "ERRO: $*"; echo "Veja a secao 'Problemas comuns' em likwid/LEIAME_LINUX.md"; exit 1; }
+erro() { echo; echo "ERRO: $*"; echo "Veja Explicações/13-Script-de-Coleta.md"; exit 1; }
 
 rm -rf "$OUT" bin
 mkdir -p "$OUT/raw" bin
