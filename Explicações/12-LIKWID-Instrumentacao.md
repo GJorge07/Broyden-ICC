@@ -79,6 +79,59 @@ Outras métricas úteis nos arquivos:
 - Se FLOPS_AVX ≈ FLOPS_DP, quase todas as contas foram vetorizadas com AVX. Se FLOPS_AVX = 0,
   o código é escalar.
 
+## O que é DP e o que é AVX (os dois grupos de FLOPS)
+
+São duas formas de contar as contas de ponto flutuante do programa. A diferença está em
+**quantas contas cada instrução faz**.
+
+### DP = *Double Precision* (precisão dupla)
+
+São as contas com `double`, o tipo usado em todo o código (x, F, Jacobiana). O grupo
+**FLOPS_DP** conta **todas** as operações com double, qualquer que seja a instrução usada:
+
+| Tipo de instrução | Contas por instrução |
+|---|---|
+| Escalar (normal) | 1 |
+| SSE (128 bits) | 2 doubles de uma vez |
+| AVX (256 bits) | 4 doubles de uma vez |
+
+Métrica do gráfico: **`DP [MFLOP/s]`**, o total de contas com double por segundo, em milhões.
+
+### AVX = *Advanced Vector Extensions*
+
+São instruções **vetoriais** (SIMD: *Single Instruction, Multiple Data*). O processador tem
+registradores de 256 bits, onde cabem **4 doubles**, e **uma instrução faz a mesma conta nos 4
+ao mesmo tempo**:
+
+```
+sem AVX (escalar):              com AVX (vetorizado):
+diag[0] = -4*x[0] + 3           diag[0..3] = -4*x[0..3] + 3   <- 1 instrução, 4 contas
+diag[1] = -4*x[1] + 3
+diag[2] = -4*x[2] + 3
+diag[3] = -4*x[3] + 3           <- 4 instruções
+```
+
+O grupo **FLOPS_AVX** conta **só** as contas feitas com essas instruções de 256 bits.
+Métrica do gráfico: **`Packed DP [MFLOP/s]`** ("packed" = empacotado, 4 doubles juntos).
+
+### Como ler os dois juntos
+
+| Situação | Significado | Exemplo no trabalho |
+|---|---|---|
+| **AVX ≈ DP** | quase todas as contas foram vetorizadas | `sl` não otimizado: o laço interno do Gauss denso vetoriza |
+| **AVX = 0** | código totalmente escalar | `sl` otimizado: o Gauss tridiagonal não vetoriza (cada linha depende da anterior); `jacobiana` não otimizada: as contas úteis ficam no laço com `if` |
+| **AVX alto** | o laço vetorizou | `jacobiana` otimizada: `diag[i] = -4x[i]+3`, sem `if` e com `restrict` |
+
+**Quem vetoriza é o compilador**, por causa de `-O3 -march=native -mavx`. O `-fopt-info-vec`
+avisa na compilação quais laços ele vetorizou ("loop vectorized using 32 byte vectors": 32
+bytes = 256 bits = 4 doubles; ver `compilacao.log` dentro dos `.tar.gz`). O FLOPS_AVX
+**confirma com o programa rodando** o que o compilador prometeu, e essas são duas evidências
+independentes para o relatório.
+
+**Cuidado:** vetorizar acelera a conta em até 4×, mas **não muda a complexidade**. O Gauss
+denso vetorizado (AVX alto) continua O(n³) e perde de longe para o tridiagonal escalar
+(AVX = 0), que é O(n).
+
 ## Cuidados descobertos na coleta
 
 1. **Estouro do contador MEM.** No i5-7500, os contadores do MEM têm 32 bits e contam linhas

@@ -52,6 +52,28 @@ versão, o grupo e o N vêm do nome do arquivo.
 
 Um leitor desse jeito foi testado em 19/11 e leu os 300 valores sem nenhuma falha.
 
+## Conferência dos 12 gráficos com o enunciado (20/11)
+
+Abri os 12 PDFs um por um:
+
+| Exigência do enunciado | Situação |
+|---|---|
+| 3 trechos × 4 testes = 12 gráficos de linhas | ✅ `tempo_`, `mem_`, `l2_`, `flops_` × `newton`, `jacobiana`, `sl` |
+| Uma cor por versão | ✅ vermelho = não otimizado, azul = otimizado, em todos |
+| Eixo X = N em escala log, com os 12 N | ✅ marcas em 32 … 20000 |
+| Tempo: tempo médio em ms, eixo Y em log | ✅ |
+| Banda: `Memory bandwidth [MBytes/s]` do grupo MEM | ✅ |
+| Cache miss L2: miss ratio do grupo L2CACHE | ✅ `L2 miss ratio` |
+| Operações: MFLOP/s de FLOPS_DP e FLOPS_AVX | ✅ `DP [MFLOP/s]` e `Packed DP [MFLOP/s]` no mesmo gráfico |
+| MAX = 25, ε = 0 | ✅ registrado no `sistema.txt` das duas coletas |
+
+Observações para o texto:
+- a linha da não otimizada termina em N = 4000 (e em 1000 no `mem_newton`, com nota);
+- em `flops_newton` a curva otimizada fica achatada perto de zero, e em `flops_jacobiana` a DP
+  não otimizada também. Citar os valores no texto (tabela 4 do `18`).
+
+O que é DP e AVX: ver `12-LIKWID-Instrumentacao.md`.
+
 ## Como os gráficos foram feitos
 
 Python + matplotlib, em **dois passos**:
